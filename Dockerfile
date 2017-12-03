@@ -1,16 +1,26 @@
-FROM ruby:2.4.2
+FROM alpine:3.6
 
-ENV RAILS_ENV production
-RUN apt-get update -qq && apt-get install -y nodejs
-RUN gem install foreman
-RUN git clone https://github.com/fastladder/fastladder.git
+ENV RAILS_ENV="production" \
+    RUNTIME_PACKAGES="ruby ruby-irb ruby-json ruby-rake ruby-bigdecimal ruby-io-console ruby-dev nodejs libxml2-dev libxslt-dev mariadb-client-libs tzdata git" \
+    DEV_PACKAGES="build-base linux-headers mariadb-dev"
+
+RUN apk add --update --no-cache $RUNTIME_PACKAGES && \
+    git clone https://github.com/fastladder/fastladder.git
+
 WORKDIR /fastladder
+
 ADD config/database.yml ./config/database.yml
 ADD config/secrets.yml ./config/secrets.yml
-RUN echo "gem 'activerecord-nulldb-adapter'" >> Gemfile
-RUN bundle install --without development test
-RUN bundle exec rake assets:precompile DATABASE_URL=nulldb://localhost SECRET_KEY_BASE=secret_key_base
-RUN rm ./config/database.yml
+
+RUN echo "gem 'activerecord-nulldb-adapter'" >> Gemfile && \
+    apk add --update --virtual build-dependencies --no-cache $DEV_PACKAGES && \
+    gem install bundler --no-document && \
+    gem install foreman --no-document && \
+    bundle config build.nokogiri --use-system-libraries && \
+    bundle install --without development test && \
+    apk del build-dependencies && \
+    bundle exec rake assets:precompile DATABASE_URL=nulldb://localhost SECRET_KEY_BASE=secret_key_base && \
+    rm ./config/database.yml
 
 EXPOSE 5000
-CMD ["/usr/local/bundle/bin/foreman", "start"]
+CMD ["foreman", "start"]
