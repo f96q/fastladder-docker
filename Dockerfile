@@ -1,8 +1,7 @@
 FROM ruby:2.4.2
 
 ENV RAILS_ENV production
-RUN apt-get update -qq && apt-get install -y nodejs python-dev python-pip
-RUN pip install awscli
+RUN apt-get update -qq && apt-get install -y nodejs
 RUN gem install foreman
 RUN git clone https://github.com/fastladder/fastladder.git
 WORKDIR /fastladder
