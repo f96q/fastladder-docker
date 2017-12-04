@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.7
 
 ENV RAILS_ENV="production" \
     RUNTIME_PACKAGES="ruby ruby-irb ruby-json ruby-rake ruby-bigdecimal ruby-io-console ruby-dev nodejs libxml2-dev libxslt-dev mariadb-client-libs tzdata git" \
