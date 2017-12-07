@@ -9,8 +9,8 @@ RUN apk add --update --no-cache $RUNTIME_PACKAGES && \
 
 WORKDIR /fastladder
 
-ADD config/database.yml ./config/database.yml
-ADD config/secrets.yml ./config/secrets.yml
+COPY config/database.yml ./config/database.yml
+COPY config/secrets.yml ./config/secrets.yml
 
 RUN echo "gem 'activerecord-nulldb-adapter'" >> Gemfile && \
     apk add --update --virtual build-dependencies --no-cache $DEV_PACKAGES && \
