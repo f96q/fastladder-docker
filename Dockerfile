@@ -1,7 +1,7 @@
 FROM alpine:3.7
 
 ENV RAILS_ENV="production" \
-    RUNTIME_PACKAGES="ruby ruby-irb ruby-json ruby-rake ruby-bigdecimal ruby-io-console ruby-dev nodejs libxml2-dev libxslt-dev mariadb-client-libs tzdata git libffi" \
+    RUNTIME_PACKAGES="ruby ruby-irb ruby-json ruby-rake ruby-bigdecimal ruby-io-console ruby-dev nodejs libxml2-dev libxslt-dev mariadb-client-libs tzdata git libffi imagemagick" \
     DEV_PACKAGES="build-base linux-headers mariadb-dev libffi-dev"
 
 RUN apk add --update --no-cache $RUNTIME_PACKAGES && \
