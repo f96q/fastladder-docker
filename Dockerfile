@@ -14,6 +14,7 @@ COPY config/secrets.yml ./config/secrets.yml
 
 RUN echo "gem 'activerecord-nulldb-adapter'" >> Gemfile && \
     apk add --update --virtual build-dependencies --no-cache $DEV_PACKAGES && \
+    sed -i -e "s/gem 'mysql2'/gem 'mysql2', '~> 0.3.20'/" Gemfile && \
     gem install bundler --no-document && \
     gem install foreman --no-document && \
     bundle config build.nokogiri --use-system-libraries && \
